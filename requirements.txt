@@ -1,0 +1,6 @@
+numpy>=1.26
+# Apple Silicon MLX backend (install on macOS with Apple Silicon):
+mlx>=0.20; sys_platform == "darwin" and platform_machine == "arm64"
+# Optional Core ML model generation benchmark. Install separately if desired:
+# coremltools>=8
+# torch>=2.2
