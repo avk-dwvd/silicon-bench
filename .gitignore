@@ -1,0 +1,61 @@
+# --- Python Core & Byte-compiled ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# --- Distribution & Packaging ---
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# --- Virtual Environments ---
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# --- Testing & Code Quality Tools ---
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.cache/
+
+# --- Jupyter Notebooks ---
+.ipynb_checkpoints
+**/__pycache__/.ipynb_checkpoints/
+
+# --- IDEs & Editors ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- Operating System Files ---
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
