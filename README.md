@@ -67,7 +67,7 @@ Run portable tests from the repository root:
 
     python -m unittest discover -s tests
 
-These tests do not require MLX or a GPU. Hardware measurements require the matching Apple Silicon environment. Please include the tested macOS, Python, MLX version, benchmark profile, and sanitized JSONL when reporting a measurement issue. Do not submit unsanitized machine output.
+Most unit tests do not require MLX or a GPU. Hardware integration smoke tests automatically run the MLX GPU and Core ML prediction paths when those backends are available, and skip when they are not. They use small workloads and do not assert performance scores. Please include the tested macOS, Python, MLX version, benchmark profile, and sanitized JSONL when reporting a measurement issue. Do not submit unsanitized machine output.
 
 ## License
 
