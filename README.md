@@ -7,7 +7,7 @@ Apple Silicon Benchmarker runs bounded, sequential CPU, memory-copy, MLX/Metal, 
 On an Apple Silicon Mac, install Homebrew and Xcode Command Line Tools first. Then clone the repo and run `make run`:
 
 ```sh
-git clone <repository-url>
+git clone https://github.com/avk-dwvd/silicon-bench.git
 cd benchmarker
 make run
 ```
