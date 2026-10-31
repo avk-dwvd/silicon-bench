@@ -8,7 +8,7 @@ On an Apple Silicon Mac, install Homebrew and Xcode Command Line Tools first. Th
 
 ```sh
 git clone https://github.com/avk-dwvd/silicon-bench.git
-cd benchmarker
+cd silicon-bench
 make run
 ```
 
