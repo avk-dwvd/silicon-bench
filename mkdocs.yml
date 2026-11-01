@@ -1,0 +1,10 @@
+site_name: Silicon Bench
+site_url: https://avk-dwvd.github.io/silicon-bench/
+repo_url: https://github.com/avk-dwvd/silicon-bench
+edit_uri: edit/main/docs/
+theme:
+  name: mkdocs
+nav:
+  - Home: index.md
+  - Reference:
+      - Benchmark methodology: reference/methodology.md
