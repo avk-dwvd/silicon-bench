@@ -72,3 +72,17 @@ Most unit tests do not require MLX or a GPU. Hardware integration smoke tests au
 ## License
 
 This project is licensed under the GNU General Public License, version 3. See LICENSE.
+
+### Documentation
+
+Read the [Silicon Bench documentation](https://avk-dwvd.github.io/silicon-bench/) for setup, benchmark details, and methodology.
+
+### Contributing to Documentation
+
+Documentation source files live under `docs/`, and navigation and site configuration live in `mkdocs.yml`. Install MkDocs locally with Homebrew:
+
+```bash
+brew install mkdocs
+```
+
+Preview changes with `mkdocs serve` and validate them with `mkdocs build --strict`. Submit documentation changes through pull requests. GitHub Actions validates documentation changes on PRs and publishes them automatically when merged into the default branch.
