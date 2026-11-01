@@ -6,5 +6,8 @@ theme:
   name: mkdocs
 nav:
   - Home: index.md
-  - Reference:
-      - Benchmark methodology: reference/methodology.md
+  - Setup: setup.md
+  - Running Benchmarks: running.md
+  - Methodology: methodology.md
+  - Contributing: contributing.md
+  - License: license.md

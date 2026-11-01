@@ -47,7 +47,7 @@ The benchmark program runs each selected benchmark to completion before starting
 
 `--all` detects OS, architecture, core counts, installed memory, and a best-effort available-memory estimate. Unavailable chip/GPU-core, power, or thermal information is recorded as unavailable rather than inferred. It chooses conservative allocation and model sizes; each memory buffer is capped at 256 MiB. These are safe starting settings, not a thermal guarantee. Close other demanding workloads and keep the Mac ventilated for repeatable results. Activity, power mode, temperature, OS version, package builds, and BLAS thread settings can change results.
 
-MLX/Metal hardware benchmarks require a compatible Apple Silicon Mac and a working MLX install. Other platforms may skip unsupported backends. METHODOLOGY.md documents formulas, timing, validation, cache effects, and comparison limits.
+MLX/Metal hardware benchmarks require a compatible Apple Silicon Mac and a working MLX install. Other platforms may skip unsupported backends. [The methodology guide](https://avk-dwvd.github.io/silicon-bench/methodology/) documents formulas, timing, validation, cache effects, and comparison limits.
 
 ## Privacy
 
@@ -75,7 +75,7 @@ This project is licensed under the GNU General Public License, version 3. See LI
 
 ### Documentation
 
-Read the [Silicon Bench documentation](https://avk-dwvd.github.io/silicon-bench/) for setup, benchmark details, and methodology.
+Read the [Silicon Bench documentation](https://avk-dwvd.github.io/silicon-bench/) for the [setup guide](https://avk-dwvd.github.io/silicon-bench/setup/), [benchmark usage](https://avk-dwvd.github.io/silicon-bench/running/), [methodology](https://avk-dwvd.github.io/silicon-bench/methodology/), and contribution guidance.
 
 ### Contributing to Documentation
 
