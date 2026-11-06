@@ -1,0 +1,5 @@
+
+# Ruff configuration for silicon-bench
+
+[lint.per-file-ignores]
+"benchmark_mlx.py" = ["BLE001"]

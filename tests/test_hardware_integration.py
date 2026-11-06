@@ -13,8 +13,9 @@ def mlx_gpu_ready():
         return False
     try:
         import mlx.core as mx
+
         return str(mx.default_device()).lower().startswith("device(gpu")
-    except Exception:
+    except Exception:  # noqa: BLE001
         return False
 
 
@@ -26,24 +27,33 @@ def coreml_ready():
         if spec is None or spec.origin is None:
             return False
         package = Path(spec.origin).parent
-        if not all((package / name).is_file() for name in ("libcoremlpython.so", "libmilstoragepython.so")):
+        if not all(
+            (package / name).is_file()
+            for name in ("libcoremlpython.so", "libmilstoragepython.so")
+        ):
             return False
         import coremltools as ct
+
         return hasattr(ct, "ComputeUnit")
-    except Exception:
+    except Exception:  # noqa: BLE001
         return False
 
 
 @unittest.skipUnless(mlx_gpu_ready(), "requires an available MLX Metal GPU")
 class MLXHardwareIntegrationTests(unittest.TestCase):
     def test_gpu_matmul_and_compile_smoke(self):
-        result = bench.mlx_bench({"matrix_n": 16, "timing_seconds": {"matrix_aggregate": 0.001}})
+        result = bench.mlx_bench(
+            {"matrix_n": 16, "timing_seconds": {"matrix_aggregate": 0.001}}
+        )
         self.assertEqual(result["correctness_status"], "passed")
         self.assertGreater(result["timed_repetitions"], 0)
         self.assertIn("compile", result)
 
     def test_all_precision_formats_smoke(self):
-        cfg = {"precision_matmul_n": 64, "timing_seconds": {"precision_per_format": 0.001}}
+        cfg = {
+            "precision_matmul_n": 64,
+            "timing_seconds": {"precision_per_format": 0.001},
+        }
         result = bench.precision_throughput_bench(cfg)
         self.assertEqual(result["correctness_status"], "passed")
         self.assertEqual(result["format_count"], 6)
@@ -54,8 +64,12 @@ class MLXHardwareIntegrationTests(unittest.TestCase):
                 self.assertGreater(item["median_tflops"], 0)
 
     def test_transformer_prefill_decode_and_gradient_update_smoke(self):
-        cfg = {"transformer_seq": 8, "transformer_width": 16, "transformer_layers": 1,
-               "timing_seconds": {"transformer_phase": 0.001}}
+        cfg = {
+            "transformer_seq": 8,
+            "transformer_width": 16,
+            "transformer_layers": 1,
+            "timing_seconds": {"transformer_phase": 0.001},
+        }
         result = bench.transformer_bench(cfg)
         self.assertEqual(result["correctness_status"], "passed")
         self.assertGreater(result["parameter_change_l1"], 0)
@@ -64,19 +78,25 @@ class MLXHardwareIntegrationTests(unittest.TestCase):
         self.assertGreater(result["training_tokens_per_second"], 0)
 
     def test_quantized_linear_smoke(self):
-        result = bench.quant_bench({"quant_matrix_n": 64,
-                                    "timing_seconds": {"quantization_aggregate": 0.001}})
+        result = bench.quant_bench(
+            {"quant_matrix_n": 64, "timing_seconds": {"quantization_aggregate": 0.001}}
+        )
         self.assertEqual(result["correctness_status"], "passed")
         self.assertTrue(result["output_shape_matches"])
         self.assertTrue(result["outputs_finite"])
-        self.assertLessEqual(result["relative_mean_absolute_output_error"], result["relative_mae_tolerance"])
+        self.assertLessEqual(
+            result["relative_mean_absolute_output_error"],
+            result["relative_mae_tolerance"],
+        )
 
 
 @unittest.skipUnless(coreml_ready(), "requires Core ML Tools with native bindings")
 class CoreMLHardwareIntegrationTests(unittest.TestCase):
     def test_generated_model_prediction_and_reference_check(self):
         with tempfile.TemporaryDirectory() as tmp, warnings.catch_warnings():
-            warnings.filterwarnings("ignore", category=ResourceWarning, message="Implicitly cleaning up")
+            warnings.filterwarnings(
+                "ignore", category=ResourceWarning, message="Implicitly cleaning up"
+            )
             path = Path(tmp) / "generated.mlmodel"
             result = bench.ane_bench({}, path)
         self.assertEqual(result["correctness_status"], "passed")

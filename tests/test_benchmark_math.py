@@ -1,6 +1,5 @@
 import contextlib
 import io
-import json
 import subprocess
 import sys
 import tempfile
@@ -33,21 +32,31 @@ class BenchmarkMathTests(unittest.TestCase):
             bench.sample_stats([])
 
     def test_profile_configuration_is_bounded(self):
-        spec = {"ram_bytes": 24 * 1024**3, "available_ram_bytes_estimate": 8 * 1024**3,
-                "physical_cpu_count": 12, "logical_cpu_count": 12}
+        spec = {
+            "ram_bytes": 24 * 1024**3,
+            "available_ram_bytes_estimate": 8 * 1024**3,
+            "physical_cpu_count": 12,
+            "logical_cpu_count": 12,
+        }
         quick = bench.sizes(spec, "all", "quick")
         thorough = bench.sizes(spec, "all", "thorough")
         self.assertLessEqual(quick["memory_bytes_per_buffer"], 256 * 1024**2)
         self.assertEqual(quick["precision_matmul_n"], 4096)
-        self.assertGreater(thorough["timing_seconds"]["precision_per_format"],
-                           quick["timing_seconds"]["precision_per_format"])
+        self.assertGreater(
+            thorough["timing_seconds"]["precision_per_format"],
+            quick["timing_seconds"]["precision_per_format"],
+        )
         self.assertEqual(quick["memory_threads"], 12)
-        constrained = bench.sizes({**spec, "available_ram_bytes_estimate": 512 * 1024**2}, "all")
+        constrained = bench.sizes(
+            {**spec, "available_ram_bytes_estimate": 512 * 1024**2}, "all"
+        )
         self.assertEqual(constrained["precision_matmul_n"], 1024)
         self.assertEqual(constrained["transformer_seq"], 64)
 
     def test_public_value_scrubs_local_roots(self):
-        value = f"at {Path.home()}/private and {Path(__file__).resolve().parents[1]}/file"
+        value = (
+            f"at {Path.home()}/private and {Path(__file__).resolve().parents[1]}/file"
+        )
         safe = bench.sanitize_public_value(value)
         self.assertNotIn(str(Path.home()), safe)
         self.assertNotIn(str(Path(__file__).resolve().parents[1]), safe)
@@ -71,8 +80,12 @@ class ReportingTests(unittest.TestCase):
             raw = Path(tmp) / "existing.jsonl"
             raw.write_text("preserve this")
             script = Path(bench.__file__)
-            proc = subprocess.run([sys.executable, str(script), "--only", "cpu",
-                                   "--output", str(raw)], text=True, capture_output=True)
+            proc = subprocess.run(
+                [sys.executable, str(script), "--only", "cpu", "--output", str(raw)],
+                check=False,
+                text=True,
+                capture_output=True,
+            )
             self.assertEqual(proc.returncode, 2)
             self.assertIn("choose a new --output path or pass --overwrite", proc.stderr)
             self.assertEqual(raw.read_text(), "preserve this")
@@ -80,13 +93,30 @@ class ReportingTests(unittest.TestCase):
     def test_jsonl_error_status_and_html_are_safe(self):
         with tempfile.TemporaryDirectory() as tmp:
             raw = Path(tmp) / "raw.jsonl"
-            reporter = bench.Reporter(raw, {"machine": str(Path.home())}, {"profile": "quick"})
-            reporter.run("broken", lambda: (_ for _ in ()).throw(RuntimeError(str(Path.home() / "secret"))))
-            reporter.run("mlx_matmul_throughput_by_precision", lambda: {
-                "correctness_status": "passed",
-                "formats": [{"format": "FP32", "status": "ok", "correctness_status": "passed",
-                             "median_tflops": 1.0, "fastest_observed_tflops": 1.1}],
-            })
+            reporter = bench.Reporter(
+                raw, {"machine": str(Path.home())}, {"profile": "quick"}
+            )
+            reporter.run(
+                "broken",
+                lambda: (_ for _ in ()).throw(
+                    RuntimeError(str(Path.home() / "secret"))
+                ),
+            )
+            reporter.run(
+                "mlx_matmul_throughput_by_precision",
+                lambda: {
+                    "correctness_status": "passed",
+                    "formats": [
+                        {
+                            "format": "FP32",
+                            "status": "ok",
+                            "correctness_status": "passed",
+                            "median_tflops": 1.0,
+                            "fastest_observed_tflops": 1.1,
+                        }
+                    ],
+                },
+            )
             reporter.close()
 
             parsed = report_mlx.summarize_file(raw)
